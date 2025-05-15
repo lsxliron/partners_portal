@@ -15,11 +15,11 @@ defmodule ICapital.InvestorsFixtures do
         dob: ~D[2025-05-14],
         first_name: "some first_name",
         last_name: "some last_name",
-        phone_number: "some phone_number",
-        records: ["option1", "option2"],
-        state: "some state",
+        phone_number: "2125556789",
+        records: ["file10", "file11"],
+        state: "NY",
         street: "some street",
-        zip_code: "some zip_code"
+        zip_code: "12345"
       })
       |> ICapital.Investors.create_investor_info()
 

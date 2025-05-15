@@ -20,7 +20,7 @@ defmodule ICapitalWeb.Router do
   scope "/", ICapitalWeb do
     pipe_through :browser
 
-    get "/", PageController, redirect: "/log_in"
+    get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
