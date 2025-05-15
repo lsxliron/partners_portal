@@ -1,6 +1,6 @@
 defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
   use ICapitalWeb, :live_component
-
+  require Logger
   alias ICapital.Investors
 
   @impl true
@@ -72,6 +72,24 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
     """
   end
 
+  @doc """
+  Handles the file upload and return the files path after upload ot the assigns
+  """
+  @spec upload_files(socket :: Phoenix.LiveView.Socket.t()) :: list(String.t())
+  def upload_files(socket) do
+    consume_uploaded_entries(socket, :documents, fn %{path: path}, _entry ->
+      target_folder = :code.priv_dir(:i_capital) |> Path.join("uploads")
+      filename = Path.basename(path)
+      dest = Path.join(target_folder, filename)
+      Logger.info("uploading file to #{dest}")
+
+      # TODO: better error handling
+      File.cp!(path, dest)
+      Logger.info("#{dest} was uploaded successfully")
+      {:ok, dest}
+    end)
+  end
+
   @impl true
   def update(%{investor_info: investor_info} = assigns, socket) do
     {:ok,
@@ -83,12 +101,21 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
   end
 
   @impl true
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :documents, ref)}
+  end
+
+  @impl true
   def handle_event("validate", %{"investor_info" => investor_info_params}, socket) do
     changeset = Investors.change_investor_info(socket.assigns.investor_info, investor_info_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
   def handle_event("save", %{"investor_info" => investor_info_params}, socket) do
+    uploaded_files = upload_files(socket)
+
+    # Ensure no errors on upload
+    investor_info_params = investor_info_params |> Map.put("records", uploaded_files)
     save_investor_info(socket, socket.assigns.action, investor_info_params)
   end
 
