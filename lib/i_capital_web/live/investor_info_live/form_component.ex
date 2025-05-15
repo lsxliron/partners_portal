@@ -4,6 +4,20 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
   alias ICapital.Investors
 
   @impl true
+  def mount(socket) do
+    socket =
+      socket
+      |> assign(:uploaded_files, [])
+      |> allow_upload(:documents,
+        accept: ~w(.jpg .jpeg .pdf .png .tiff .tar .gz .zip),
+        max_entries: 10,
+        max_file_size: 100_000_000
+      )
+
+    {:ok, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -27,13 +41,29 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
         <.input field={@form[:city]} type="text" label="City" />
         <.input field={@form[:state]} type="text" label="State" />
         <.input field={@form[:zip_code]} type="text" label="Zip code" />
-        <.input
-          field={@form[:records]}
-          type="select"
-          multiple
-          label="Records"
-          options={[{"Option 1", "option1"}, {"Option 2", "option2"}]}
-        />
+        <div class="mt-2">
+          <label for="documents" class="block text-sm font-semibold leading-6 text-zinc-800 mb-2">
+            Documents
+          </label>
+          <.live_file_input upload={@uploads.documents} />
+        </div>
+
+        <section>
+          <article :for={entry <- @uploads.documents.entries} class="upload-entry">
+            <div class="w-full flex items-center gap-4">
+              <p class="flex-initial">{entry.client_name}</p>
+              <progress class="flex-1" value={entry.progress} max="100">{entry.progress}%</progress>
+              <button
+                type="button"
+                phx-click="cancel-upload"
+                phx-value-ref={entry.ref}
+                aria-label="cancel"
+              >
+                <.icon name="hero-x-mark" />
+              </button>
+            </div>
+          </article>
+        </section>
         <:actions>
           <.button phx-disable-with="Saving...">Save Investor info</.button>
         </:actions>

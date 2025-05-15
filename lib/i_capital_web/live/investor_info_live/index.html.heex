@@ -37,7 +37,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="investor_info-modal" show on_cancel={JS.patch(~p"/inverstor_infos")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="investor_info-modal"
+  show
+  on_cancel={JS.patch(~p"/inverstor_infos")}
+>
   <.live_component
     module={ICapitalWeb.InvestorInfoLive.FormComponent}
     id={@investor_info.id || :new}
