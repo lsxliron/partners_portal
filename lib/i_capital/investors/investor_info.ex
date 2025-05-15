@@ -43,7 +43,8 @@ defmodule ICapital.Investors.InvestorInfo do
     ])
     |> validate_length(:records, min: 1, max: 10)
     |> validate_length(:records, max: 10)
-    |> validate_length(:zip, is: 5)
+    |> validate_length(:zip_code, is: 5)
     |> validate_length(:phone_number, is: 10)
+    |> validate_length(:state, is: 2)
   end
 end
