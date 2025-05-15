@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :i_capital, ICapital.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "i_capital_dev",
+  username: System.get_env("POSTGRES_USERNAME", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
+  database: System.get_env("POSTGRES_DATBASE", "i_capital_dev"),
+  port: System.get_env("POSTGRES_PORT", "5432"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
