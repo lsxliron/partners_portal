@@ -113,8 +113,6 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
 
   def handle_event("save", %{"investor_info" => investor_info_params}, socket) do
     uploaded_files = upload_files(socket)
-
-    # Ensure no errors on upload
     investor_info_params = investor_info_params |> Map.put("records", uploaded_files)
     save_investor_info(socket, socket.assigns.action, investor_info_params)
   end
