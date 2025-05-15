@@ -17,7 +17,13 @@ defmodule ICapitalWeb.Router do
   scope "/", ICapitalWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", InvestorInfoLive.Index, :index
+    live "/new", InvestorInfoLive.Index, :new
+    live "/:id/edit", InvestorInfoLive.Index, :edit
+
+    live "/:id", InvestorInfoLive.Show, :show
+    live "/:id/show/edit", InvestorInfoLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

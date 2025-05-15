@@ -1,0 +1,34 @@
+<.header>
+  Investor info {@investor_info.id}
+  <:subtitle>This is a investor_info record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/inverstor_infos/#{@investor_info}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit investor_info</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="First name">{@investor_info.first_name}</:item>
+  <:item title="Last name">{@investor_info.last_name}</:item>
+  <:item title="Dob">{@investor_info.dob}</:item>
+  <:item title="Phone number">{@investor_info.phone_number}</:item>
+  <:item title="Street">{@investor_info.street}</:item>
+  <:item title="City">{@investor_info.city}</:item>
+  <:item title="State">{@investor_info.state}</:item>
+  <:item title="Zip code">{@investor_info.zip_code}</:item>
+  <:item title="Records">{@investor_info.records}</:item>
+</.list>
+
+<.back navigate={~p"/inverstor_infos"}>Back to inverstor_infos</.back>
+
+<.modal :if={@live_action == :edit} id="investor_info-modal" show on_cancel={JS.patch(~p"/inverstor_infos/#{@investor_info}")}>
+  <.live_component
+    module={ICapitalWeb.InvestorInfoLive.FormComponent}
+    id={@investor_info.id}
+    title={@page_title}
+    action={@live_action}
+    investor_info={@investor_info}
+    patch={~p"/inverstor_infos/#{@investor_info}"}
+  />
+</.modal>

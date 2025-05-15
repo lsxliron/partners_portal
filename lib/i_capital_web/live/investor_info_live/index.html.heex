@@ -1,0 +1,49 @@
+<.header>
+  Listing Inverstor infos
+  <:actions>
+    <.link patch={~p"/inverstor_infos/new"}>
+      <.button>New Investor info</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="inverstor_infos"
+  rows={@streams.inverstor_infos}
+  row_click={fn {_id, investor_info} -> JS.navigate(~p"/inverstor_infos/#{investor_info}") end}
+>
+  <:col :let={{_id, investor_info}} label="First name">{investor_info.first_name}</:col>
+  <:col :let={{_id, investor_info}} label="Last name">{investor_info.last_name}</:col>
+  <:col :let={{_id, investor_info}} label="Dob">{investor_info.dob}</:col>
+  <:col :let={{_id, investor_info}} label="Phone number">{investor_info.phone_number}</:col>
+  <:col :let={{_id, investor_info}} label="Street">{investor_info.street}</:col>
+  <:col :let={{_id, investor_info}} label="City">{investor_info.city}</:col>
+  <:col :let={{_id, investor_info}} label="State">{investor_info.state}</:col>
+  <:col :let={{_id, investor_info}} label="Zip code">{investor_info.zip_code}</:col>
+  <:col :let={{_id, investor_info}} label="Records">{investor_info.records}</:col>
+  <:action :let={{_id, investor_info}}>
+    <div class="sr-only">
+      <.link navigate={~p"/inverstor_infos/#{investor_info}"}>Show</.link>
+    </div>
+    <.link patch={~p"/inverstor_infos/#{investor_info}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, investor_info}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: investor_info.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="investor_info-modal" show on_cancel={JS.patch(~p"/inverstor_infos")}>
+  <.live_component
+    module={ICapitalWeb.InvestorInfoLive.FormComponent}
+    id={@investor_info.id || :new}
+    title={@page_title}
+    action={@live_action}
+    investor_info={@investor_info}
+    patch={~p"/inverstor_infos"}
+  />
+</.modal>
