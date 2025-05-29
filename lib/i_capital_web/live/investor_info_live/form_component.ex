@@ -9,7 +9,7 @@ defmodule ICapitalWeb.InvestorInfoLive.FormComponent do
       socket
       |> assign(:uploaded_files, [])
       |> allow_upload(:documents,
-        accept: ~w(.jpg .jpeg .pdf .png .tiff .tar .gz .zip, .xlsx .xls .doc. docx),
+        accept: ~w(.jpg .jpeg .pdf .png .tiff .tar .gz .zip .xlsx .xls .doc .docx),
         max_entries: 10,
         max_file_size: 100_000_000
       )
